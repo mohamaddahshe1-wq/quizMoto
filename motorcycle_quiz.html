@@ -1,0 +1,1776 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار الدراجات الآلية 2025</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #fff;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255, 107, 107, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(78, 205, 196, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            font-family: 'Cairo', sans-serif;
+            font-size: 2.5em;
+            font-weight: 800;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            text-shadow: 0 0 30px rgba(255, 107, 107, 0.3);
+        }
+
+        .progress-container {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 50px;
+            padding: 8px;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            height: 12px;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4);
+            border-radius: 50px;
+            width: 0%;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 20px rgba(78, 205, 196, 0.5);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            font-size: 1.1em;
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stat-value {
+            font-weight: 700;
+            font-size: 1.3em;
+        }
+
+        .question-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transform: translateY(20px);
+            opacity: 0;
+            animation: slideIn 0.5s forwards;
+        }
+
+        @keyframes slideIn {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .question-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .question-number {
+            background: linear-gradient(135deg, #ff6b6b, #ff8787);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.2em;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        .question-text {
+            font-size: 1.3em;
+            font-weight: 600;
+            line-height: 1.6;
+            flex: 1;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 20px 25px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .option:hover:not(.disabled) {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(78, 205, 196, 0.5);
+            transform: translateX(-5px);
+            box-shadow: 0 4px 20px rgba(78, 205, 196, 0.2);
+        }
+
+        .option-letter {
+            background: rgba(255, 255, 255, 0.1);
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1em;
+        }
+
+        .option.correct {
+            background: rgba(78, 205, 196, 0.2);
+            border-color: #4ecdc4;
+            animation: correctPulse 0.6s;
+        }
+
+        .option.correct .option-letter {
+            background: #4ecdc4;
+            color: #1a1a2e;
+        }
+
+        .option.incorrect {
+            background: rgba(255, 107, 107, 0.2);
+            border-color: #ff6b6b;
+            animation: incorrectShake 0.6s;
+        }
+
+        .option.incorrect .option-letter {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .option.disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        @keyframes correctPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        @keyframes incorrectShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 600;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        .feedback.show {
+            animation: feedbackSlide 0.4s forwards;
+        }
+
+        @keyframes feedbackSlide {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .feedback.correct {
+            background: rgba(78, 205, 196, 0.2);
+            border: 2px solid #4ecdc4;
+            color: #4ecdc4;
+        }
+
+        .feedback.incorrect {
+            background: rgba(255, 107, 107, 0.2);
+            border: 2px solid #ff6b6b;
+            color: #ff6b6b;
+        }
+
+        .next-btn {
+            background: linear-gradient(135deg, #4ecdc4, #44a3a0);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(78, 205, 196, 0.3);
+        }
+
+        .next-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(78, 205, 196, 0.4);
+        }
+
+        .next-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .results {
+            text-align: center;
+            padding: 60px 40px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .results h2 {
+            font-family: 'Cairo', sans-serif;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .score {
+            font-size: 4em;
+            font-weight: 800;
+            margin: 30px 0;
+        }
+
+        .score.passing {
+            color: #4ecdc4;
+            text-shadow: 0 0 30px rgba(78, 205, 196, 0.5);
+        }
+
+        .score.failing {
+            color: #ff6b6b;
+            text-shadow: 0 0 30px rgba(255, 107, 107, 0.5);
+        }
+
+        .restart-btn {
+            background: linear-gradient(135deg, #ff6b6b, #ff8787);
+            color: white;
+            border: none;
+            padding: 18px 50px;
+            border-radius: 12px;
+            font-size: 1.2em;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .restart-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(255, 107, 107, 0.4);
+        }
+
+        .group-title {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px 25px;
+            border-radius: 12px;
+            margin: 40px 0 25px 0;
+            font-size: 1.3em;
+            font-weight: 700;
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .question-card {
+                padding: 25px;
+            }
+            
+            .question-text {
+                font-size: 1.1em;
+            }
+            
+            .stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏍️ اختبار الدراجات الآلية 2025</h1>
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <span>السؤال:</span>
+                    <span class="stat-value" id="currentQuestion">1</span>
+                    <span>/</span>
+                    <span class="stat-value" id="totalQuestions">0</span>
+                </div>
+                <div class="stat">
+                    <span style="color: #4ecdc4;">✓</span>
+                    <span class="stat-value" id="correctCount" style="color: #4ecdc4;">0</span>
+                </div>
+                <div class="stat">
+                    <span style="color: #ff6b6b;">✗</span>
+                    <span class="stat-value" id="incorrectCount" style="color: #ff6b6b;">0</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="quizContainer"></div>
+    </div>
+
+    <script>
+        const quizData = [
+            // مجموعة 1
+            {
+                group: "مجموعة 1",
+                question: "ما السبب الرئيسي الذي يجعل من صيانة دراجتك اآللية بانتظام ضروريا؟",
+                options: [
+                    "تمكين الدراجة من حمل حقائب",
+                    "تسريع الدراجة أكثر من المركبات األخرى",
+                    "حفظ صالحية الدراجة للسير"
+                ],
+                correct: 2
+            },
+            {
+                group: "مجموعة 1",
+                question: "أنت تقود دراجتك اآللية على طريق ريفية. ماذا تفعل إذا صادفت مواشي تستخدم الطريق؟",
+                options: [
+                    "تمنحها مساحة كافية",
+                    "تقترب منها إلجبارها على افساح المرور",
+                    "تطلق بوق دراجتك"
+                ],
+                correct: 0
+            },
+            {
+                group: "مجموعة 1",
+                question: "أنت سائق دراجة آلية تقترب من مفرق الى يمينك وتظهر لك سيارة تقترب أيضا الى المفرق ذاته. ماذا تفعل؟",
+                options: [
+                    "تخفف السرعة وتنتظر اشارة السيارة",
+                    "تزيد السرعة لتجاوز التقاطع دون تأخير",
+                    "تتوقف، ألن السيارة لها حق األولوية"
+                ],
+                correct: 0
+            },
+            {
+                group: "مجموعة 1",
+                question: "دراجتك اآللية متوقفة على طريق ذي اتجاهين. كيف تصعد إلى الدراجة؟",
+                options: [
+                    "من اليسار، وتشغّل الفرامل األمامية",
+                    "من اليمين، وترخي الفرامل الخلفية",
+                    "من اليمين، وتترك الفرامل"
+                ],
+                correct: 0
+            },
+            {
+                group: "مجموعة 1",
+                question: "أنت تقود دراجتك اآللية في المدينة ليًل. الطرق مبللة بعد المطر. كيف ستؤثر عليك انعكاسات األسطح المبللة؟",
+                options: [
+                    "ستُسّهل رؤية األجسام غير المضاءة",
+                    "ستُسّهل التوقف",
+                    "ستُصعّب رؤية األجسام غير المضاءة"
+                ],
+                correct: 2
+            },
+            {
+                group: "مجموعة 1",
+                question: "تشعر بالبرد عند قيادة دراجتك اآللية. كيف سيؤثر ذلك عليك؟",
+                options: [
+                    "سوف تكون أكثر يقظة",
+                    "سوف تفقد التركيز",
+                    "سوف تتفاعل بشكل أسرع"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 1",
+                question: "أنت تقود دراجتك اآللية ليًل، وتُبهرك أضواء مركبة تقترب من أمامك. ماذا يجب أن تفعل؟",
+                options: [
+                    "تبطئ وتتوقف إذا لزم األمر",
+                    "تطفئ مصابيحك األمامية",
+                    "تستخدم الضوء العالي"
+                ],
+                correct: 0
+            },
+            {
+                group: "مجموعة 1",
+                question: "دراجتك اآللية ال تحتوي على \"فرامل ُمرتبطة\". في حالة الطوارئ، ما الذي يجب عليك فعله للتوقف بسرعة؟",
+                options: [
+                    "تشغيل الفرامل األمامية مباشرةً قبل الفرامل الخلفية",
+                    "تشغيل الفرامل الخلفية مباشرة قبل الفرامل األمامية",
+                    "تشغيل الفرامل الخلفية فقط"
+                ],
+                correct: 0
+            },
+            {
+                group: "مجموعة 1",
+                question: "أي مما يلي قد يحتاج إلى تعديل عند حمل راكب خلفي؟",
+                options: [
+                    "العادم",
+                    "المصابيح األمامية",
+                    "إشارات اإلتجاه"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 1",
+                question: "ما هو سطح الطريق األكثر تأثيرا على خسارة ثبات دراجتك اآللية؟",
+                options: [
+                    "الحصى غير المتماسكة",
+                    "االسمنت )الباطون(",
+                    "األسفلت"
+                ],
+                correct: 0
+            },
+            {
+                group: "مجموعة 1",
+                question: "متى يُسمح لك بالتوقف على جانب الطريق السريعة؟",
+                options: [
+                    "إذا شعرت بالتعب وتحتاج إلى الراحة",
+                    "إذا تجاوزت المخرج",
+                    "في حاالت الطوارئ فقط"
+                ],
+                correct: 2
+            },
+            {
+                group: "مجموعة 1",
+                question: "أين يجب على مستخدمي الطريق توخي الحذر بشكل خاص لمراقبة راكبي الدراجات اآللية والمركبات األخرى؟",
+                options: [
+                    "عند التقاطعات",
+                    "عند معابر المشاة",
+                    "على الطرق ذات االتجاهين"
+                ],
+                correct: 0
+            },
+            {
+                group: "مجموعة 1",
+                question: "كيف يتم ضبط \"سلسلة الدفع\" النهائية؟",
+                options: [
+                    "ارخاء عزق االطار الخلفي وشده الى الموقع المناسب",
+                    "ارخاء عزق المحرك وشده الى الموقع المناسب",
+                    "الجوابان السابقان صحيحان"
+                ],
+                correct: 2
+            },
+            {
+                group: "مجموعة 1",
+                question: "لقد قمت بضبط \"سلسلة الدفع\" بشكل غير صحيح، ما المشكلة التي قد تحصل؟",
+                options: [
+                    "قراءة غير دقيقة لعداد السرعة",
+                    "ضبط غير صحيح للعجلة الخلفية",
+                    "فقدان قوة الكبح"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 1",
+                question: "تحتاج إلى نفخ إطاري دراجتك. كيف يمكنك معرفة الضغط المناسب؟",
+                options: [
+                    "بالتحقق من دليل استخدام الدراجة",
+                    "يظهر على جانب اإلطار",
+                    "يظهر مختوما على العجلة"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 1",
+                question: "أنت تحمل راكبا في العربة الجانبية. ما الذي يجب عليك تعديله الستيعاب الوزن الزائد؟",
+                options: [
+                    "ميزان العجلتين األمامية والخلفية",
+                    "عيار الوزن على الشوكة األمامية",
+                    "عيار الوزن على ممتص الصدمات الخلفي"
+                ],
+                correct: 2
+            },
+            {
+                group: "مجموعة 1",
+                question: "لماذا يجب عليك التحقق من فوق كتفك قبل االنعطاف يسارا إلى طريق جانبي؟",
+                options: [
+                    "للتحقق من وجود حركة مرور قادمة",
+                    "للتحقق من عدم وجود مركبات تتجاوزك",
+                    "للتأكد من كون الطريق الجانبي حرا"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 1",
+                question: "ما اإلجراءات الوقائية التي يمكنك اتخاذها لحماية دراجتك اآللية من خطر الحريق؟",
+                options: [
+                    "تجنب القيادة بخزان وقود ممتلئ",
+                    "التحقق من عدم وجود أي رائحة وقود )بنزين( قوية",
+                    "استخدام بنزين خالي من الرصاص"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 1",
+                question: "أنت تنعطف يسارا للخروج من طريق بإتجاهين إلى طريق بإتجاهين. ما الذي يجب عليك فعله قبل الخروج؟",
+                options: [
+                    "تتحقق من عرض الحاجز الوسطي",
+                    "تلتزم الجانب األيسر من المسرب",
+                    "تتوقف، ثم تختار غيار سرعة منخفضا جدا"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 1",
+                question: "ما الذي يجعل رؤيتك مع دراجتك أكثر وضوحا في ضوء النهار؟",
+                options: [
+                    "ارتداء خوذة سوداء",
+                    "ارتداء خوذة زاهية األلوان",
+                    "ارتداء سترة داكنة"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 1",
+                question: "ما الذي يجب عليك التحقق منه بعد االنتهاء من شد \"سلسلة الدفع\"؟",
+                options: [
+                    "ميزان العجلة الخلفية",
+                    "ضغط اإلطار الخلفي",
+                    "سًلمة ممتص الصدمات الخلفي"
+                ],
+                correct: 0
+            },
+            {
+                group: "مجموعة 1",
+                question: "حصل معك حادث تصادم مع مركبة وأصيب شخص وتضررت دراجتك اآللية. ما الذي يجب عليك معرفته؟",
+                options: [
+                    "تفاصيل تأمين مركبة السائق",
+                    "ما إذا كان السائق هو مالك المركبة",
+                    "ما إذا كان السائق مرخصا له بالقيادة"
+                ],
+                correct: 0
+            },
+            {
+                group: "مجموعة 1",
+                question: "ماذا تفعل عندما تواجه عائقا على جانبك من الطريق؟",
+                options: [
+                    "تزيد سرعتك لتتجاوز أوال",
+                    "تستمر، فلديك األولوية",
+                    "تفسح الطريق للمركبات المقبلة"
+                ],
+                correct: 2
+            },
+            {
+                group: "مجموعة 1",
+                question: "لقد عبرت للتو مياها عميقة. ماذا يجب أن تفعل للتأكد من أن فراملك تعمل بشكل صحيح؟",
+                options: [
+                    "تتجنب نهائيا استخدام الفرامل لبضعة كيلومترات",
+                    "تسير ببطء مع الضغط برفق على الفرامل",
+                    "تتوقف لمدة ساعة على األقل إلعطائها وقتا لتجف"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 1",
+                question: "بعض الطرق ذات االتجاهين تقسم إلى ثًلثة مسارب. لماذا تُعد هذه الطرق خطرة بشكل خاص؟",
+                options: [
+                    "ألنه يُمكن للمركبات ان تتجاوز عن جهة اليمين",
+                    "ألنه يُسمح باستخدام المسرب األوسط لتجاوز المركبات في كال االتجاهين",
+                    "ألن المسرب األوسط يُستخدم فقط في حاالت الطوارئ"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 1",
+                question: "قبل بدء الرحلة، من الحكمة تخطيط مسارها. كيف يمكنك القيام بذلك؟",
+                options: [
+                    "تتواصل مع ورش تصليح قريبة من المسار",
+                    "تّطلع على الخريطة",
+                    "تّطلع على دليل استخدام دراجتك"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 1",
+                question: "تتألف عدة الوقاية الشخصية لسائق الدراجة اآللية وراكبها من:",
+                options: [
+                    "الخوذة والقفازات",
+                    "الخوذة والسترة والقفازات والسروال والحذاء",
+                    "الخوذة والقفازات والحذاء"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 1",
+                question: "وصلت إلى موقع حادث. شخص ينزف بشدة من جرح في ذراعه وغير مغروز فيها شيء. ماذا يجب أن تفعل؟",
+                options: [
+                    "تضغط على الجرح وتترك الذراع منخفضة",
+                    "تضغط على الجرح وترفع الذراع",
+                    "تترك الجرح ينزف"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 1",
+                question: "في حالة وقوع حادث، ال يتنفس المصاب. ماذا يجب أن تفعل أثناء مساعدته على استعادة تنفسه؟",
+                options: [
+                    "تديره الى جانبه",
+                    "تهّزه بقوة",
+                    "تميل رأسه للخلف برفق"
+                ],
+                correct: 2
+            },
+            {
+                group: "مجموعة 1",
+                question: "وقع حادث تصادم. راكب الدراجة اآللية ُمصاٌب وفاقدٌ للوعي. لماذا ال يجب عادة ان تنزع خوذته، إال عند الضرورة القصوى؟",
+                options: [
+                    "قد ال يرغب في ذلك",
+                    "قد يُؤدي ذلك إلى إصابة أكثر خطورة",
+                    "قد يتعّرض لحر شديد او برد شديد"
+                ],
+                correct: 1
+            },
+            // مجموعة 2
+            {
+                group: "مجموعة 2",
+                question: "يبدأ سائق سيارة مبتدئ بالدخول الى مسربك من طريق جانبي على اليمين. ماذا تفعل؟",
+                options: [
+                    "تستعد لإلبطاء والتوقف",
+                    "تدعه يدخل، ثم تسير خلفه مباشرة",
+                    "تنعطف إلى الطريق الجانبي"
+                ],
+                correct: 0
+            },
+            {
+                group: "مجموعة 2",
+                question: "يقود سائق سيارة مبتدئ المركبة التي أمامك. ماذا تفعل؟",
+                options: [
+                    "تحافظ على هدوئك وتتحلى بالصبر",
+                    "تضع مصابيحك األمامية على الضوء العالي )انوار الطريق(",
+                    "تطلق بوقك وتتجاوزه"
+                ],
+                correct: 0
+            },
+            {
+                group: "مجموعة 2",
+                question: "أنت تنقل حمولة على رف أمتعة دراجتك اآللية. ما الذي يجب عليك التأكد منه؟",
+                options: [
+                    "أن تكون الحمولة مغطاة بغطاء بًلستيكي",
+                    "أن تكون الحمولة مرئية بوضوح",
+                    "أن تكون الحمولة مثبتة بإحكام"
+                ],
+                correct: 2
+            },
+            {
+                group: "مجموعة 2",
+                question: "لقد مررت للتو في تجمع ماء عميق. ما الذي يجب عليك التحقق منه بعد ان تكون قد ابتعدت عن الماء؟",
+                options: [
+                    "الفرامل",
+                    "المصابيح األمامية",
+                    "التوجيه"
+                ],
+                correct: 0
+            },
+            {
+                group: "مجموعة 2",
+                question: "هطلت األمطار بعد فترة طويلة من الحر والجفاف. كيف يؤثر ذلك على سطح الطريق؟",
+                options: [
+                    "قد تُغطى بالحصى",
+                    "قد تصبح زلقة بشكل غير طبيعي",
+                    "قد يتفتت سطح الطريق ويتكسر"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 2",
+                question: "عند االنعطاف، ماذا يجب أن يفعل راكب الدراجة الخلفي؟",
+                options: [
+                    "يعطي إشارات اتجاه بذراعيه عنك نيابة",
+                    "ينحني جانبا لرؤية األمام",
+                    "ينحني معك في المنعطفات"
+                ],
+                correct: 2
+            },
+            {
+                group: "مجموعة 2",
+                question: "ما الذي يمكن أن يسببه وجود حمولة ثقيلة في صندوق الدراجة اآللية العلوي؟",
+                options: [
+                    "تحسين الكبح",
+                    "تحسين توازن الدراجة",
+                    "تخفيض توازن الدراجة"
+                ],
+                correct: 2
+            },
+            {
+                group: "مجموعة 2",
+                question: "في ظروف القيادة العادية، كيف يجب أن تستخدم الفرامل؟",
+                options: [
+                    "استخدام الفرامل الخلفية أوال ثم األمامية",
+                    "عند اإلنعطاف بالدراجة اآللية أو خًلل قيادتها عبر منعطف",
+                    "عندما تكون الدراجة اآللية في اتجاه مستقيم وتتحرك في خط مستقيم"
+                ],
+                correct: 2
+            },
+            {
+                group: "مجموعة 2",
+                question: "أي مما يلي ينتج عن شرب الكحول؟",
+                options: [
+                    "ردود فعل أسرع",
+                    "زيادة التركيز",
+                    "ضعف القدرة على التمييز"
+                ],
+                correct: 2
+            },
+            {
+                group: "مجموعة 2",
+                question: "دراجتك اآللية مجهزة بـ \"محّول حفّاز\" (catalytic converter). ما الذي يقلله؟",
+                options: [
+                    "ضجيج المحرك",
+                    "انبعاثات العادم",
+                    "ضجيج العادم"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 2",
+                question: "انتظرت بعض الوقت لًلنعطاف يسارا إلى طريق جانبي. ماذا يجب أن تفعل قبل االنعطاف مباشرة؟",
+                options: [
+                    "اإللتفات يميناً ويساراً - إلقاء نظرة منقذة للحياة",
+                    "االقتراب الى جهة الرصيف",
+                    "التلويح لحركة المرور القادمة"
+                ],
+                correct: 0
+            },
+            {
+                group: "مجموعة 2",
+                question: "متى يجب زيادة ضغط إطارات دراجتك اآللية؟",
+                options: [
+                    "عند حمل حمولة ثقيلة",
+                    "عند القيادة في طقس حار",
+                    "عند القيادة في طقس ممطر"
+                ],
+                correct: 0
+            },
+            {
+                group: "مجموعة 2",
+                question: "يُقدّم لك صديق خوذة أمان مستعملة لتستخدمها. لماذا قد تكون هذه فكرة سيئة؟",
+                options: [
+                    "قد تكون من النوع الذي يغطي كامل الوجه",
+                    "قد تكون تالفة",
+                    "ستخالف القانون"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 2",
+                question: "كيف تُحافظ على الفرامل التي تعمل باألسًلك؟",
+                options: [
+                    "بفحصها في درجة حرارة التشغيل العادية",
+                    "بتزييتها وضبطها بانتظام",
+                    "بإزالة أي حركة حرة للرافعة أو الدواسة"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 2",
+                question: "تتكون مسافة التوقف اإلجمالية من مسافة التفكير ومسافة الكبح. أنت على طريق جاف وجيد، مع فرامل وإطارات جيدة. ما هي مسافة الكبح النموذجية عند سرعة 75 كلم في الساعة؟",
+                options: [
+                    "٢٤ مترا",
+                    "٣٨ متًرا",
+                    "٥٥ مترا"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 2",
+                question: "لست متأكدا مما إذا كان دواء السعال سيؤثر على قدرتك على القيادة بأمان. ماذا تفعل؟",
+                options: [
+                    "تستشير صديقا أو قريبا",
+                    "تستشير طبيبك او الصيدالني",
+                    "ال تتناول الدواء"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 2",
+                question: "لماذا يكون سائقو الدراجات اآللية الشباب أكثر عرضة للتعرض للحوادث؟",
+                options: [
+                    "ألنهم يقودون في مجموعات",
+                    "ألنهم قليلو الخبرة",
+                    "ألنهم حذرون جدا عند التقاطعات"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 2",
+                question: "أنت في طريق ذي اتجاه واحد وتريد االنعطاف يسارا. يوجد مسربين. في أي مسرب يجب عليك ان تضع دراجتك؟",
+                options: [
+                    "في المسرب األيسر",
+                    "في المسرب األيمن",
+                    "على يمين الخط الوسطي الفاصل مباشرة"
+                ],
+                correct: 0
+            },
+            {
+                group: "مجموعة 2",
+                question: "انحرف سائق مركبة من طريق جانبي أمامك، مما دفعك إلى الضغط على المكابح بقوة. ماذا يجب أن تفعل؟",
+                options: [
+                    "تضيء انوار الطريق إلظهار انزعاجك",
+                    "تتجاهل الخطأ وتحافظ على هدوئك",
+                    "تطلق بوق دراجتك إلظهار انزعاجك"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 2",
+                question: "ماذا تفعل عندما ترى اثنين من المشاة المسنين على وشك عبور الطريق أمامك؟",
+                options: [
+                    "تكون حذراً؛ فقد يُخطئان في تقدير سرعتك",
+                    "تتوقع أن ينتظراك حتى تمر",
+                    "تزيد سرعتك لتتجاوزهما بسرعة"
+                ],
+                correct: 0
+            },
+            {
+                group: "مجموعة 2",
+                question: "من هو مستخدم الطريق األكثر عرضة للخطر عند تقاطعات الطرق؟",
+                options: [
+                    "سائق سيارة",
+                    "سائق شاحنة",
+                    "سائق دراجة آلية"
+                ],
+                correct: 2
+            },
+            {
+                group: "مجموعة 2",
+                question: "أنت تقترب من دّوار. هناك خيول أمامك مباشرة. ماذا تفعل؟",
+                options: [
+                    "تمنحها مساحة كافية",
+                    "تطلق بوق دراجتك كتحذير",
+                    "تعاملها كأي مركبة أخرى"
+                ],
+                correct: 0
+            },
+            {
+                group: "مجموعة 2",
+                question: "أنت تتبع شاحنة على طريق مبلل. ماذا تفعل عندما يُصعّب رذاذ المطر رؤية الطريق أمامك؟",
+                options: [
+                    "تزيد المسافة بينك وبينها لتحسين الرؤية",
+                    "تبقى قريبا من الشاحنة، بعيدا عن رذاذ المطر",
+                    "تشغّل مصابيحك األمامية بأقصى سرعة"
+                ],
+                correct: 0
+            },
+            {
+                group: "مجموعة 2",
+                question: "متى ال يجب عليك التوقف على طريق حر ومفتوح؟",
+                options: [
+                    "في جميع األوقات",
+                    "خًلل ساعات النهار",
+                    "في اوقات الذروة وكثافة السير"
+                ],
+                correct: 0
+            },
+            {
+                group: "مجموعة 2",
+                question: "انت تلتزم بمسافة مًلحقة طويلة بانتظار تجاوز مركبة كبيرة. ماذا تفعل إذا دخلت سيارة في هذه المسافة؟",
+                options: [
+                    "تخفف سرعتك الستعادة مسافة مالحقة آمنة",
+                    "تومض مصابيح الطريق",
+                    "تشغّل بوق السيارة"
+                ],
+                correct: 0
+            },
+            {
+                group: "مجموعة 2",
+                question: "أنت تتبع مركبة كبيرة. لماذا يجب عليك الحفاظ على مسافة مًلحقة آمنة خلفها؟",
+                options: [
+                    "ألنك ستسمح للسائق برؤيتك في مرآته",
+                    "ألنك ستتمكن من االنعطاف بسرعة أكبر",
+                    "ألنك ستساعد المركبة الكبيرة على التوقف بسهولة أكبر"
+                ],
+                correct: 0
+            },
+            {
+                group: "مجموعة 2",
+                question: "سائق المركبة التي أمامك يسير بشكل مستقيم وتعتقد أنه نسي إلغاء إشارة االنعطاف اليسرى. ماذا تفعل؟",
+                options: [
+                    "تضيء أنوارك لتنبيه السائق",
+                    "تتجاوز من اليمين إذا كان ذلك ممكناً",
+                    "تبقى خلفه وال تتجاوزه"
+                ],
+                correct: 2
+            },
+            {
+                group: "مجموعة 2",
+                question: "أنت تتبع مركبة على مسافة آمنة على طريق مبلل. يتجاوزك سائق آخر ويدخل ضمن مسافة المًلحقة التي تركتها أمامك. ماذا تفعل؟",
+                options: [
+                    "تخفف سرعتك الستعادة مسافة مالحقة آمنة",
+                    "تضيء مصابيحك األمامية كتحذير",
+                    "تحاول التجاوز بأقرب فرصة سانحة آمنة"
+                ],
+                correct: 0
+            },
+            {
+                group: "مجموعة 2",
+                question: "ُوضع شخص مصاب في وضعية المعالجة. إنه فاقد للوعي ولكنه يتنفس بشكل طبيعي. ما الذي يجب فعله أيضا؟",
+                options: [
+                    "تتأكد من أن مجرى الهواء للتنفس مفتوح",
+                    "تضع ذراعيه الى جانبه",
+                    "تضغط بقوة بين كتفيه"
+                ],
+                correct: 0
+            },
+            {
+                group: "مجموعة 2",
+                question: "أنت أول من يصل إلى موقع حادث يُصاب فيه أشخاص بجروح بالغة. لقد شغّلَت أضواء التنبيه من الخطر وتأكدَت من إيقاف جميع المحركات. ماذا عليَك فعله أيضا؟",
+                options: [
+                    "تتأكد من استدعاء سيارة إسعاف",
+                    "تُبعد المصابين عن سياراتهم",
+                    "توقف السيارات األخرى وتطلب المساعدة من سائقيها"
+                ],
+                correct: 0
+            },
+            {
+                group: "مجموعة 2",
+                question: "وقع حادث، يعاني شخص ما من حروق بالغة. ما الذي يمكنك فعله لمساعدته؟",
+                options: [
+                    "تضع مرهما على اإلصابة",
+                    "تغسل الحروق بسائل نظيف وبارد ومعقّم",
+                    "تزيل أي شيء ملتصق بالحروق"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 2",
+                question: "وقع حادث تصادم للتو. شخص مصاب مستلٍق على طريق مزدحم. ما أول شيء يجب عليك فعله لمساعدته؟",
+                options: [
+                    "تتأكد من إبقاء المصاب دافئاُ",
+                    "تعالج المصاب من الصدمة",
+                    "تحذّر حركة المرور األخرى"
+                ],
+                correct: 2
+            },
+            // مجموعة 3
+            {
+                group: "مجموعة 3",
+                question: "متى ستكون مسافة توقفك اإلجمالية أطول؟",
+                options: [
+                    "عند القيادة ليًل",
+                    "عند صعود تلة",
+                    "عند القيادة مع راكب"
+                ],
+                correct: 2
+            },
+            {
+                group: "مجموعة 3",
+                question: "ما المسار الذي ال يجب عليك استخدامه عند قيادة دراجتك اآللية؟",
+                options: [
+                    "مسار التسارع",
+                    "مسار التجاوز",
+                    "مسار القطار أو الترام"
+                ],
+                correct: 2
+            },
+            {
+                group: "مجموعة 3",
+                question: "أنت تقترب من طريق سطحها حصى غير متماسكة. ماذا يجب أن تفعل؟",
+                options: [
+                    "القيادة بشكل عادي",
+                    "تخفيض السرعة",
+                    "التوقف المفاجئ"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 3",
+                question: "ماذا سيحدث إذا نظرت إلى أسفل العجلة األمامية أثناء القيادة؟",
+                options: [
+                    "سيجعل توجيهك أسهل",
+                    "سيؤثر ذلك سلباً على توازنك",
+                    "ستستهلك وقودا أقل"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 3",
+                question: "ما الذي يجب عليك فحصه بعد إعادة تركيب العجلة الخلفية؟",
+                options: [
+                    "حاملك الجانبي",
+                    "التحميل المسبق لنظام التعليق",
+                    "ميزان العجلة"
+                ],
+                correct: 2
+            },
+            {
+                group: "مجموعة 3",
+                question: "كيف تختلف قيادة دراجة آلية لها عربة جانبية عن قيادة دراجة آلية منفردة؟",
+                options: [
+                    "يسمح لك بفرملة متأخرة عند وجود مخاطر",
+                    "يسمح لك باالنعطاف بسرعة أكبر",
+                    "يتطلب أسلوب قيادة مختلف"
+                ],
+                correct: 2
+            },
+            {
+                group: "مجموعة 3",
+                question: "يُستخدم \"مفتاح فصل المحرك\":",
+                options: [
+                    "لتقليل السرعة في حاالت الطوارئ",
+                    "إليقاف المحرك في حاالت الطوارئ",
+                    "إليقاف المحرك بشكل طبيعي"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 3",
+                question: "ألي غرض يجب استخدام \"مفتاح فصل المحرك\" في دراجتك اآللية؟",
+                options: [
+                    "لتوفير استهًلك البطارية",
+                    "إليقاف المحرك لفترة قصيرة",
+                    "إليقاف المحرك في حاالت الطوارئ"
+                ],
+                correct: 2
+            },
+            {
+                group: "مجموعة 3",
+                question: "لماذا يجب توخي الحذر عند عبور سكة حديدية؟",
+                options: [
+                    "ألن المشاة يعبرون عليها",
+                    "ألن القضبان الفوالذية زلقة",
+                    "ألن خطوط القطارات دائما \"نشطة\""
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 3",
+                question: "ترى نمطا بألوان قوس قزح على الطريق. ما الذي سيحذرك منه هذا؟",
+                options: [
+                    "سطح طريق مصقول",
+                    "وجود وقود متسرب على الطريق",
+                    "وجود ماء على الطريق"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 3",
+                question: "دراجتك اآللية غير مزّودة بـ \"فرامل ُمرتبطة\". ماذا تفعل عند الفرملة بشكل عادي حتى التوقف؟",
+                options: [
+                    "تضغط على كال مقبضي الفرامل بسالسة",
+                    "تضغط على أي من مقبضي الفرامل برفق",
+                    "تضغط على الفرامل الخلفية فقط"
+                ],
+                correct: 0
+            },
+            {
+                group: "مجموعة 3",
+                question: "هطلت األمطار بعد فترة جفاف طويلة. كيف سيؤثر ذلك على سطح الطريق؟",
+                options: [
+                    "ستكون مغمورة بالمياه",
+                    "ستكون خشنة",
+                    "ستكون زلقة"
+                ],
+                correct: 2
+            },
+            {
+                group: "مجموعة 3",
+                question: "كيف يؤثر التقدم في السن على قدرة كبار السن على القيادة؟",
+                options: [
+                    "لن يستخدموا إشارات المرور عند التقاطعات",
+                    "سيحتاجون إلى نظارات لقراءة إشارات المرور",
+                    "سيستغرقون وقتا أطول في االستجابة للمخاطر"
+                ],
+                correct: 2
+            },
+            {
+                group: "مجموعة 3",
+                question: "ما المركبات التي يجب أن تستخدم المسرب األيمن على مسلك طريق سريعة مؤلف من عدة مسارب؟",
+                options: [
+                    "جميع انواع المركبات",
+                    "المركبات الكبيرة فقط",
+                    "المركبات البطيئة فقط"
+                ],
+                correct: 0
+            },
+            {
+                group: "مجموعة 3",
+                question: "يوجد جّرار زراعي أمامك. تريد تجاوزه ولكنك غير متأكد من ان التجاوز آمن. ماذا تفعل؟",
+                options: [
+                    "تتبع مركبة أخرى تتجاوز الجّرار",
+                    "تطلق بوق دراجتك إلجبار الجّرار على التوقف",
+                    "تبقى خلف الجّرار إذا كنت تشك في سالمة انجاز مناورة التجاوز"
+                ],
+                correct: 2
+            },
+            {
+                group: "مجموعة 3",
+                question: "أنت تقترب من تقاطع مزدحم. ماذا تفعل عندما تدرك في اللحظة األخيرة أنك في المسرب الخطأ؟",
+                options: [
+                    "تستمر بالسير في هذا المسرب",
+                    "تتوقف ريثما يتم إخًلء التقاطع",
+                    "تستخدم إشارات اإلتجاه لإلنتقال الى المسرب الصحيح"
+                ],
+                correct: 0
+            },
+            {
+                group: "مجموعة 3",
+                question: "كيف ستتصرف مع السائقين الذين يبدون عديمي الخبرة؟",
+                options: [
+                    "عليك أن تكون صبوًرا وتستعد لرد فعلهم البطيء",
+                    "عليك أن تتجاوزهم في أسرع وقت ممكن",
+                    "عليك أن تطلق بوق دراجتك لتحذيرهم من وجودك"
+                ],
+                correct: 0
+            },
+            {
+                group: "مجموعة 3",
+                question: "ماذا تفعل عند القيادة في ظروف الضباب؟",
+                options: [
+                    "تتجنب استخدام المصابيح األمامية الخافتة",
+                    "تتبع عن قرب أضواء السيارات األخرى",
+                    "تزيد وقتًا إضافياً على مدة رحلتك المتوقعة"
+                ],
+                correct: 2
+            },
+            {
+                group: "مجموعة 3",
+                question: "ماذا تفعل عند القيادة في تحويلة سير على طريق؟",
+                options: [
+                    "تحافظ على مسافة كافية من المركبة التي أمامك",
+                    "تبقى قريبا من المركبة التي أمامك لتقليل الطوابير",
+                    "تغّير المسارات للحفاظ على انسيابية حركة المرور"
+                ],
+                correct: 0
+            },
+            {
+                group: "مجموعة 3",
+                question: "يُسمح لك باستخدام بوق الدراجة:",
+                options: [
+                    "إلعطائك حق األولوية",
+                    "إلجبار السائقين البطيئين على التجاوز",
+                    "لتحذير اآلخرين من وجودك"
+                ],
+                correct: 2
+            },
+            {
+                group: "مجموعة 3",
+                question: "دراجتك في حالة الوقوف على الطريق ليًل. أين يجب عليك استخدام أضواء الوقوف؟",
+                options: [
+                    "عندما يكون السير سريعاً او كثيفاً",
+                    "عند وجود خطوط متواصلة في منتصف الطريق",
+                    "عندما تواجه حركة مرور قادمة"
+                ],
+                correct: 2
+            },
+            {
+                group: "مجموعة 3",
+                question: "ما الذي قد يسبب تآكًل مفرطا أو غير متساٍو لإلطارات؟",
+                options: [
+                    "عطل في نظام الفرامل",
+                    "عطل في النظام الكهربائي",
+                    "عطل في علبة التروس"
+                ],
+                correct: 0
+            },
+            {
+                group: "مجموعة 3",
+                question: "أزعجك سلوك سائق. ماذا يمكنك أن تفعل لتجاوز هذا الموقف بأمان؟",
+                options: [
+                    "تتبعه، وتضيء مصابيحك األمامية",
+                    "تصرخ بألفاظ مسيئة",
+                    "تتوقف وتأخذ استراحة"
+                ],
+                correct: 2
+            },
+            {
+                group: "مجموعة 3",
+                question: "كيف تتجاوز مركبة طويلة وبطيئة الحركة على طريق مزدحمة؟",
+                options: [
+                    "تتبعها عن قرب وتستمر في التحرك لرؤية الطريق أمامك",
+                    "تحافظ على مسافة كافية خلفها للتمكن من رؤية اذا ما كانت الطريق خالية",
+                    "تبقى خلفها حتى يلوح لك السائق بالمرور"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 3",
+                question: "متى يُسمح لك بالتوقف على يمين الطريق السريعة؟",
+                options: [
+                    "إذا كان عليك قراءة خريطة",
+                    "في حالة طوارئ أو عطل",
+                    "عندما تكون متعبا وتحتاج إلى استراحة"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 3",
+                question: "المصاب ال يمكنه التنفس بشكل طبيعي ويجب إجراء ضغطات على الصدر. ما وتيرة سرعة الضغط؟",
+                options: [
+                    "٦٠ ضغطة في الدقيقة",
+                    "١٢٠ ضغطة في الدقيقة",
+                    "٢٤٠ ضغطة في الدقيقة"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 3",
+                question: "وصلت إلى حادث. أحد المشاة ينزف بغزارة من جرح في ساقه. الساق ليست مكسورة وال يوجد شيء في الجرح. ماذا يجب أن تفعل؟",
+                options: [
+                    "ترّبت على الجرح إليقاف النزيف",
+                    "تبقي كلتا ساقيه ممدودتين على األرض",
+                    "ترفع الساق النازفة لتخفيف النزيف"
+                ],
+                correct: 2
+            },
+            // مجموعة 4
+            {
+                group: "مجموعة 4",
+                question: "يعتبر اإللتفاف وسط شارع عام مخالفة سير من الفئة:",
+                options: [
+                    "الثانية",
+                    "الثالثة",
+                    "الرابعة"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 4",
+                question: "ان مخالفة مواصفات الخوذة الواقية يعتبر مخالفة سير من الفئة:",
+                options: [
+                    "الثانية",
+                    "الثالثة",
+                    "الرابعة"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 4",
+                question: "ان االقتراب من المركبات بمسافة تقل عن 50 سم يعتبر مخالفة سير من الفئة:",
+                options: [
+                    "الثانية",
+                    "الثالثة",
+                    "الرابعة"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 4",
+                question: "ان السير جنبا الى جنب مع مركبة او دراجة أخرى يعتبر مخالفة سير من الفئة:",
+                options: [
+                    "الثانية",
+                    "الثالثة",
+                    "الرابعة"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 4",
+                question: "ان تكرار استعمال المنبه او مواصلة استعماله يعتبر مخالفة سير من الفئة:",
+                options: [
+                    "الثانية",
+                    "الثالثة",
+                    "الرابعة"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 4",
+                question: "ان عدم مراعاة قواعد استعمال المنبه يعتبر مخالفة سير من الفئة:",
+                options: [
+                    "الثانية",
+                    "الثالثة",
+                    "الرابعة"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 4",
+                question: "ان استعمال المنبه في الليل عدا حاالت الضرورة القصوى يعتبر مخالفة سير من الفئة:",
+                options: [
+                    "الثانية",
+                    "الثالثة",
+                    "الرابعة"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 4",
+                question: "ان التوقف في األماكن المشار اليها بًلفتة ممنوع الوقوف والتوقف يعتبر مخالفة سير من الفئة:",
+                options: [
+                    "الثانية",
+                    "الثالثة",
+                    "الرابعة"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 4",
+                question: "ان استعانة سائقي الدراجات اآللية أو الهوائية بغيرها من المركبات او الدراجات لجرها يعتبر مخالفة سير من الفئة:",
+                options: [
+                    "الثانية",
+                    "الثالثة",
+                    "الرابعة"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 4",
+                question: "ان عدم ربط الخوذة الواقية بإحكام من سائق او راكب الدراجة اآللية يعتبر مخالفة سير من الفئة:",
+                options: [
+                    "الثانية",
+                    "الثالثة",
+                    "الرابعة"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 4",
+                question: "ان سوق الدراجة في غير اإلتجاه المحدّد يعتبر مخالفة سير من الفئة:",
+                options: [
+                    "الثالثة",
+                    "الرابعة",
+                    "الخامسة"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 4",
+                question: "ان سوق الدراجة بعكس وجهة المرور يعتبر مخالفة سير من الفئة:",
+                options: [
+                    "الثالثة",
+                    "الرابعة",
+                    "الخامسة"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 4",
+                question: "ان إحداث ضوضاء يزعج مستخدمي الطريق اآلخرين ومجاوريها يعتبر مخالفة سير من الفئة:",
+                options: [
+                    "الثالثة",
+                    "الرابعة",
+                    "الخامسة"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 4",
+                question: "ان إحداث ضوضاء يزعج مستخدمي الطريق اآلخرين ومجاوريها يعتبر مخالفة سير تستدعي:",
+                options: [
+                    "حجز الدراجة في مرآب الحجز",
+                    "احتجاز الدراجة في مكان ضبط المخالفة",
+                    "اعتقال سائق الدراجة"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 4",
+                question: "ان إجراء سباق على طرقات عامة من دون الحصول على ترخيص يعتبر مخالفة سير من الفئة:",
+                options: [
+                    "الثالثة",
+                    "الرابعة",
+                    "الخامسة"
+                ],
+                correct: 2
+            },
+            {
+                group: "مجموعة 4",
+                question: "ان القيام بحركات او مناورات ذات خطورة يعتبر مخالفة سير من الفئة:",
+                options: [
+                    "الثالثة",
+                    "الرابعة",
+                    "الخامسة"
+                ],
+                correct: 2
+            },
+            {
+                group: "مجموعة 4",
+                question: "ان غرامة الفئة الثانية من مخالفات السير ضمن أول أسبوعين تبلغ:",
+                options: [
+                    "مليون ليرة لبنانية",
+                    "مليوني ليرة لبنانية",
+                    "ثًلثة مًليين وخمسماية الف ليرة لبنانية"
+                ],
+                correct: 0
+            },
+            {
+                group: "مجموعة 4",
+                question: "ان غرامة الفئة الثالثة من مخالفات السير ضمن أول أسبوعين تبلغ:",
+                options: [
+                    "مليون ليرة لبنانية",
+                    "مليوني ليرة لبنانية",
+                    "ثًلثة مًليين وخمسماية الف ليرة لبنانية"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 4",
+                question: "ان غرامة الفئة الرابعة من مخالفات السير ضمن أول أسبوعين تبلغ:",
+                options: [
+                    "مليوني ليرة لبنانية",
+                    "ثالثة ماليين وخمسماية الف ليرة لبنانية",
+                    "ثًلثين مليون ليرة لبنانية"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 4",
+                question: "ان غرامة الفئة الخامسة من مخالفات السير تصل لغاية:",
+                options: [
+                    "مليوني ليرة لبنانية",
+                    "ثًلثة مًليين وخمسماية الف ليرة لبنانية",
+                    "ثالثين مليون ليرة لبنانية"
+                ],
+                correct: 2
+            },
+            {
+                group: "مجموعة 4",
+                question: "على سائق الدراجة اآللية استخدام أنوار الدراجة:",
+                options: [
+                    "عندما تكون إنارة الطرقات غير كافية",
+                    "عند السير وراء مركبة",
+                    "في جميع االوقات"
+                ],
+                correct: 2
+            },
+            {
+                group: "مجموعة 4",
+                question: "يسمح بركوب شخص آخر خلف سائق الدراجة إذا كانت مجهزة ومرخص لها بنقل راكب على ان ال يقل عمر الراكب عن:",
+                options: [
+                    "خمس سنوات",
+                    "عشر سنوات",
+                    "خمسة عشر سنة"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 4",
+                question: "يحظر على سائقي الدراجات اآللية قيادة دراجة آلية دون اعتمار خوذة واقية:",
+                options: [
+                    "ال يزيد عمرها عن سنة",
+                    "مربوطة بإحكام",
+                    "ال يقل وزنها عن كيلوغرام واحد"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 4",
+                question: "تسمح رخصة سوق دراجة فئة A1 بقيادة دراجة آلية ال تزيد سعة محركها عن:",
+                options: [
+                    "75 س س",
+                    "125 س س",
+                    "250 س س"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 4",
+                question: "تسمح رخصة سوق دراجة فئة A بقيادة دراجة آلية تزيد سعة محركها عن:",
+                options: [
+                    "75 س س",
+                    "125 س س",
+                    "250 س س"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 4",
+                question: "يتّم ضبط عيار فرامل الدراجة اآللية الخلفية عن طريق:",
+                options: [
+                    "شد عزقة مسكة الفرام",
+                    "شد عزقة كولييه الفرام",
+                    "شد \"سلسلة الدفع\""
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 4",
+                question: "يتعطل قشاط محرك الدراجة في حال:",
+                options: [
+                    "زادت سرعة المحرك عن السرعة القصوى",
+                    "تعدى عمر القشاط المدة الموصى بها من الصانع",
+                    "الجوابان السابقان"
+                ],
+                correct: 2
+            },
+            {
+                group: "مجموعة 4",
+                question: "وظيفة فلتر الهواء:",
+                options: [
+                    "تنظيم ضغط الهواء الداخل الى المحرك",
+                    "تنقية الهواء من الشوائب والغبار",
+                    "الجوابان السابقان"
+                ],
+                correct: 2
+            },
+            {
+                group: "مجموعة 4",
+                question: "يتّم فحص زيت محرك الدراجة:",
+                options: [
+                    "في وضع الوقوف الجانبي",
+                    "في وضع الوقوف المستقيم",
+                    "ال فرق"
+                ],
+                correct: 1
+            },
+            {
+                group: "مجموعة 4",
+                question: "يتّم تشغيل المحرك:",
+                options: [
+                    "خًلل وقوف الدراجة بشكل قائم",
+                    "خًلل وقوف الدراجة بشكل مائل",
+                    "ال فرق"
+                ],
+                correct: 2
+            },
+            {
+                group: "مجموعة 4",
+                question: "عندما تصادف سطح طريق رطب بشكل مفاجئ عليك:",
+                options: [
+                    "أن تزيد من السرعة الجتيازه",
+                    "أن تخفّف سرعة الدراجة بواسطة الفرامل",
+                    "عدم استخدام الفرامل لما بعد السير على سطح جاف"
+                ],
+                correct: 2
+            },
+            {
+                group: "مجموعة 4",
+                question: "يتّم تشغيل الفرامل خًلل تساقط المطر:",
+                options: [
+                    "باالعتماد على الفرامل الخلفية",
+                    "باالعتماد على الفرامل األمامية",
+                    "تشغيل الفرامل الخلفية واالمامية سوية وبحذر"
+                ],
+                correct: 2
+            },
+            {
+                group: "مجموعة 4",
+                question: "من فوائد الصيانة الدورية للدراجة اآللية كل شهر او شهرين:",
+                options: [
+                    "التحقق من صًلحية الفرامل وفعالية المحرك",
+                    "تنظيف الدبرياج وقشاط المحرك",
+                    "الجوابان السابقان"
+                ],
+                correct: 2
+            },
+            {
+                group: "مجموعة 4",
+                question: "ال يجب ملء الوقود خًلل دوران المحرك:",
+                options: [
+                    "لتجنب اشتعال الدراجة بسبب قرب خزان الوقود من المحرك",
+                    "لتجنب اشتعال الدراجة بسبب قرب خزان الوقود من العادم",
+                    "الجوابان السابقان"
+                ],
+                correct: 2
+            },
+            {
+                group: "مجموعة 4",
+                question: "ال يجب توقف الدراجة الى جانب مركبة خًلل االنتظار في حركة المرور:",
+                options: [
+                    "لتجنب اختفاء الدراجة في البقعة العمياء لسائق المركبة",
+                    "لتجنب مخالفة الدراجة للفراغ الجانبي المفروض قانونا والذي يجب ان يزيد عن 75 سم",
+                    "الجوابان السابقان"
+                ],
+                correct: 2
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let correctAnswers = 0;
+        let incorrectAnswers = 0;
+        let answered = false;
+
+        function renderQuestion() {
+            const container = document.getElementById('quizContainer');
+            const question = quizData[currentQuestionIndex];
+            
+            // Check if we need to show a group title
+            let groupTitle = '';
+            if (currentQuestionIndex === 0 || quizData[currentQuestionIndex - 1].group !== question.group) {
+                groupTitle = `<div class="group-title">${question.group}</div>`;
+            }
+            
+            container.innerHTML = `
+                ${groupTitle}
+                <div class="question-card">
+                    <div class="question-header">
+                        <div class="question-number">${currentQuestionIndex + 1}</div>
+                        <div class="question-text">${question.question}</div>
+                    </div>
+                    <div class="options">
+                        ${question.options.map((option, index) => `
+                            <div class="option" onclick="checkAnswer(${index})">
+                                <div class="option-letter">${String.fromCharCode(65 + index)}</div>
+                                <div>${option}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="feedback" id="feedback"></div>
+                    <button class="next-btn" id="nextBtn" onclick="nextQuestion()" disabled>السؤال التالي</button>
+                </div>
+            `;
+            
+            answered = false;
+            updateProgress();
+        }
+
+        function checkAnswer(selected) {
+            if (answered) return;
+            
+            const question = quizData[currentQuestionIndex];
+            const options = document.querySelectorAll('.option');
+            const feedback = document.getElementById('feedback');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            answered = true;
+            
+            // Disable all options
+            options.forEach(opt => opt.classList.add('disabled'));
+            
+            if (selected === question.correct) {
+                options[selected].classList.add('correct');
+                feedback.textContent = '✓ إجابة صحيحة!';
+                feedback.className = 'feedback correct show';
+                correctAnswers++;
+            } else {
+                options[selected].classList.add('incorrect');
+                options[question.correct].classList.add('correct');
+                feedback.textContent = '✗ إجابة خاطئة. الجواب الصحيح هو: ' + String.fromCharCode(65 + question.correct);
+                feedback.className = 'feedback incorrect show';
+                incorrectAnswers++;
+            }
+            
+            nextBtn.disabled = false;
+            updateStats();
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            
+            if (currentQuestionIndex < quizData.length) {
+                renderQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestionIndex + 1) / quizData.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
+            document.getElementById('totalQuestions').textContent = quizData.length;
+        }
+
+        function updateStats() {
+            document.getElementById('correctCount').textContent = correctAnswers;
+            document.getElementById('incorrectCount').textContent = incorrectAnswers;
+        }
+
+        function showResults() {
+            const container = document.getElementById('quizContainer');
+            const percentage = Math.round((correctAnswers / quizData.length) * 100);
+            const passing = percentage >= 70;
+            
+            container.innerHTML = `
+                <div class="results">
+                    <h2>${passing ? '🎉 مبروك!' : '😔 حاول مرة أخرى'}</h2>
+                    <div class="score ${passing ? 'passing' : 'failing'}">${percentage}%</div>
+                    <p style="font-size: 1.3em; margin: 20px 0;">
+                        لقد أجبت على <strong>${correctAnswers}</strong> سؤال بشكل صحيح من أصل <strong>${quizData.length}</strong>
+                    </p>
+                    <p style="font-size: 1.1em; color: ${passing ? '#4ecdc4' : '#ff6b6b'};">
+                        ${passing ? 'أنت مستعد للاختبار!' : 'تحتاج إلى المزيد من الدراسة. النجاح يتطلب 70٪ على الأقل.'}
+                    </p>
+                    <button class="restart-btn" onclick="restartQuiz()">ابدأ من جديد</button>
+                </div>
+            `;
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            correctAnswers = 0;
+            incorrectAnswers = 0;
+            answered = false;
+            renderQuestion();
+            updateStats();
+        }
+
+        // Initialize
+        renderQuestion();
+        updateStats();
+    </script>
+</body>
+</html>
