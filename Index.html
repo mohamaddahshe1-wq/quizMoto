@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title> League of leeekha</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: white;
+    text-align: center;
+}
+
+h1 { margin: 15px; }
+
+button {
+    margin: 5px;
+    padding: 10px 12px;
+    border: none;
+    border-radius: 8px;
+    background: #22c55e;
+    color: white;
+    font-weight: bold;
+}
+
+input {
+    padding: 8px;
+    margin: 5px;
+    border-radius: 6px;
+    border: none;
+    text-align: center;
+    width: 70px;
+}
+
+.card {
+    background: #1e293b;
+    margin: 15px;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.leaderboard {
+    background: #020617;
+    padding: 15px;
+    border-radius: 10px;
+    margin: 15px;
+}
+
+.winner { color: gold; font-weight: bold; }
+
+.row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.total {
+    font-size: 18px;
+    margin-top: 10px;
+    color: #38bdf8;
+}
+
+.lastRound {
+    font-size: 16px;
+    margin-top: 10px;
+    color: #facc15;
+}
+</style>
+</head>
+<body>
+
+<h1>🎴 Card Score Ultimate+</h1>
+
+<div id="home">
+    <div class="card" id="players"></div>
+    <button onclick="addPlayer()">+ Player</button><br>
+
+    <label><input type="checkbox" id="negative"> Negative Mode</label><br>
+
+    <select id="winMode">
+        <option value="high">Highest Wins</option>
+        <option value="low">Lowest Wins</option>
+    </select><br>
+
+    <input type="number" id="target" placeholder="Target Score"><br>
+
+    <button onclick="startGame()">Start Game</button>
+</div>
+
+<div id="game" style="display:none;">
+
+    <div>
+        <button onclick="goHome()">⚙️ Settings</button>
+        <button onclick="undo()">↩ Undo</button>
+        <button onclick="resetGame()">🔄 Reset</button>
+    </div>
+
+    <div class="card" id="inputs"></div>
+
+    <div class="total" id="roundTotal">Round Total: 0</div>
+    <div class="lastRound" id="lastRound">Last Round: -</div>
+
+    <button onclick="saveRound()">Save Round</button>
+    <button onclick="clearInputs()">Clear</button>
+
+    <div class="leaderboard" id="leaderboard"></div>
+</div>
+
+<script>
+let players=[], scores=[], lastRoundData=null;
+
+function addPlayer(name=""){
+    let input=document.createElement("input");
+    input.value=name;
+    input.placeholder="Name";
+    document.getElementById("players").appendChild(input);
+}
+
+function startGame(){
+    players=[]; scores=[];
+    document.querySelectorAll("#players input").forEach(i=>{
+        if(i.value.trim()){ players.push(i.value); scores.push(0); }
+    });
+
+    if(players.length<2) return alert("Min 2 players");
+
+    home.style.display="none";
+    game.style.display="block";
+
+    renderInputs();
+    update();
+}
+
+function renderInputs(){
+    let html="";
+    players.forEach((p,i)=>{
+        html+=`
+        <div class="row">
+            ${p}
+            <button onclick="step(${i},-1)">-</button>
+            <input id="p${i}" type="number" value="0" oninput="updateTotal()">
+            <button onclick="step(${i},1)">+</button>
+        </div>`;
+    });
+    inputs.innerHTML=html;
+    updateTotal();
+}
+
+function step(i,val){
+    let el=document.getElementById("p"+i);
+    el.value=parseInt(el.value||0)+val;
+    updateTotal();
+}
+
+function updateTotal(){
+    let sum=0;
+    players.forEach((p,i)=>{
+        sum+=parseInt(document.getElementById("p"+i).value)||0;
+    });
+    roundTotal.innerText="Round Total: "+sum;
+}
+
+function saveRound(){
+    let neg=negative.checked;
+    lastRoundData=[];
+
+    players.forEach((p,i)=>{
+        let v=parseInt(document.getElementById("p"+i).value)||0;
+        if(neg) v=-Math.abs(v);
+        scores[i]+=v;
+        lastRoundData.push(v);
+    });
+
+    updateLastRound();
+    clearInputs();
+    save();
+    update();
+}
+
+function updateLastRound(){
+    if(!lastRoundData) return;
+
+    let text="Last Round: ";
+    lastRoundData.forEach((v,i)=>{
+        text+=`${players[i]}(${v}) `;
+    });
+
+    document.getElementById("lastRound").innerText=text;
+}
+
+function undo(){
+    if(!lastRoundData) return;
+    players.forEach((p,i)=>{
+        scores[i]-=lastRoundData[i];
+    });
+    lastRoundData=null;
+    document.getElementById("lastRound").innerText="Last Round: -";
+    save();
+    update();
+}
+
+function clearInputs(){
+    players.forEach((p,i)=>{
+        document.getElementById("p"+i).value=0;
+    });
+    updateTotal();
+}
+
+function update(){
+    let mode=winMode.value;
+    let target=parseInt(targetInput.value);
+
+    let arr=players.map((p,i)=>({p, s:scores[i]}));
+    arr.sort((a,b)=> mode==="high"?b.s-a.s:a.s-b.s);
+
+    let html="<h2>🏆 Leaderboard</h2>";
+    arr.forEach((x,i)=>{
+        let win=i===0;
+        if(target){
+            if(mode==="high" && x.s>=target) win=true;
+            if(mode==="low" && x.s<=target) win=true;
+        }
+        html+=`<div class="${win?'winner':''}">
+        ${i+1}. ${x.p}: ${x.s}</div>`;
+    });
+
+    leaderboard.innerHTML=html;
+}
+
+function goHome(){
+    home.style.display="block";
+    game.style.display="none";
+
+    playersDiv.innerHTML="";
+    players.forEach(p=>addPlayer(p));
+}
+
+function resetGame(){
+    if(confirm("Reset game?")){
+        localStorage.clear();
+        location.reload();
+    }
+}
+
+function save(){
+    localStorage.setItem("players",JSON.stringify(players));
+    localStorage.setItem("scores",JSON.stringify(scores));
+}
+
+function load(){
+    let p=JSON.parse(localStorage.getItem("players"));
+    let s=JSON.parse(localStorage.getItem("scores"));
+
+    if(p && s){
+        players=p; scores=s;
+        home.style.display="none";
+        game.style.display="block";
+        renderInputs();
+        update();
+    }else{
+        addPlayer(); addPlayer();
+    }
+}
+
+let home=document.getElementById("home");
+let game=document.getElementById("game");
+let inputs=document.getElementById("inputs");
+let leaderboard=document.getElementById("leaderboard");
+let playersDiv=document.getElementById("players");
+let negative=document.getElementById("negative");
+let winMode=document.getElementById("winMode");
+let targetInput=document.getElementById("target");
+let roundTotal=document.getElementById("roundTotal");
+
+load();
+</script>
+
+</body>
+</html>
