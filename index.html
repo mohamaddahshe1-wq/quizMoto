@@ -2,120 +2,197 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title> League of leeekha</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>League of leeekha</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <style>
-body {
-    margin: 0;
-    font-family: Arial;
-    background: linear-gradient(135deg, #0f172a, #1e293b);
-    color: white;
-    text-align: center;
-}
+    :root {
+        --primary: #22c55e;
+        --primary-hover: #16a34a;
+        --bg-dark: #0f172a;
+        --card-bg: rgba(30, 41, 59, 0.7);
+        --accent: #38bdf8;
+        --warning: #facc15;
+    }
 
-h1 { margin: 15px; }
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        background: radial-gradient(circle at top, #1e293b 0%, #0f172a 100%);
+        color: white;
+        text-align: center;
+        min-height: 100vh;
+        padding-bottom: 40px;
+    }
 
-button {
-    margin: 5px;
-    padding: 10px 12px;
-    border: none;
-    border-radius: 8px;
-    background: #22c55e;
-    color: white;
-    font-weight: bold;
-}
+    h1 { 
+        margin: 25px 15px; 
+        font-weight: 800;
+        letter-spacing: -1px;
+        text-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
 
-input {
-    padding: 8px;
-    margin: 5px;
-    border-radius: 6px;
-    border: none;
-    text-align: center;
-    width: 70px;
-}
+    /* Container for a polished look */
+    .container {
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 0 15px;
+    }
 
-.card {
-    background: #1e293b;
-    margin: 15px;
-    padding: 15px;
-    border-radius: 10px;
-}
+    .card {
+        background: var(--card-bg);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        margin: 15px 0;
+        padding: 20px;
+        border-radius: 20px;
+        border: 1px solid rgba(255,255,255,0.1);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
 
-.leaderboard {
-    background: #020617;
-    padding: 15px;
-    border-radius: 10px;
-    margin: 15px;
-}
+    /* Modern Buttons */
+    button {
+        margin: 8px 4px;
+        padding: 12px 18px;
+        border: none;
+        border-radius: 12px;
+        background: var(--primary);
+        color: white;
+        font-weight: bold;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 0 #15803d;
+        cursor: pointer;
+        font-size: 14px;
+    }
 
-.winner { color: gold; font-weight: bold; }
+    button:active {
+        transform: translateY(3px);
+        box-shadow: 0 1px 0 #15803d;
+    }
 
-.row {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-}
+    button.secondary {
+        background: #475569;
+        box-shadow: 0 4px 0 #1e293b;
+    }
 
-.total {
-    font-size: 18px;
-    margin-top: 10px;
-    color: #38bdf8;
-}
+    /* Input Styling */
+    input, select {
+        padding: 12px;
+        margin: 8px;
+        border-radius: 10px;
+        border: 1px solid rgba(255,255,255,0.1);
+        background: #020617;
+        color: white;
+        text-align: center;
+        font-size: 16px; /* Prevents auto-zoom on iPhone */
+    }
 
-.lastRound {
-    font-size: 16px;
-    margin-top: 10px;
-    color: #facc15;
-}
+    input[type="number"] { width: 80px; }
+
+    /* Layout Components */
+    .row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 12px 0;
+        padding: 8px 12px;
+        background: rgba(255,255,255,0.05);
+        border-radius: 12px;
+    }
+
+    .player-name {
+        flex: 1;
+        text-align: left;
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+
+    .leaderboard {
+        background: #020617;
+        padding: 20px;
+        border-radius: 20px;
+        margin-top: 25px;
+        border: 1px solid var(--accent);
+    }
+
+    .winner { 
+        color: #fbbf24; 
+        font-weight: bold; 
+        background: rgba(251, 191, 36, 0.1);
+        border-radius: 8px;
+        padding: 4px;
+    }
+
+    .total { font-size: 20px; margin: 15px 0; color: var(--accent); font-weight: bold; }
+    .lastRound { font-size: 14px; color: var(--warning); font-style: italic; opacity: 0.9; }
+
+    /* Control Groups */
+    .settings-group {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
 </style>
 </head>
 <body>
 
-<h1>🎴 Card Score Ultimate+</h1>
+<div class="container">
+    <h1>🎴 Card Score Ultimate+</h1>
 
-<div id="home">
-    <div class="card" id="players"></div>
-    <button onclick="addPlayer()">+ Player</button><br>
+    <div id="home">
+        <div class="card">
+            <div id="players"></div>
+            <button class="secondary" onclick="addPlayer()">+ Add Player</button>
+        </div>
 
-    <label><input type="checkbox" id="negative"> Negative Mode</label><br>
+        <div class="card settings-group">
+            <label style="cursor: pointer;">
+                <input type="checkbox" id="negative"> Negative Mode
+            </label>
 
-    <select id="winMode">
-        <option value="high">Highest Wins</option>
-        <option value="low">Lowest Wins</option>
-    </select><br>
+            <select id="winMode">
+                <option value="high">🏆 Highest Wins</option>
+                <option value="low">📉 Lowest Wins</option>
+            </select>
 
-    <input type="number" id="target" placeholder="Target Score"><br>
-
-    <button onclick="startGame()">Start Game</button>
-</div>
-
-<div id="game" style="display:none;">
-
-    <div>
-        <button onclick="goHome()">⚙️ Settings</button>
-        <button onclick="undo()">↩ Undo</button>
-        <button onclick="resetGame()">🔄 Reset</button>
+            <input type="number" id="target" placeholder="Target Score">
+            
+            <button style="width: 100%; font-size: 1.2rem; margin-top: 10px;" onclick="startGame()">Start Game</button>
+        </div>
     </div>
 
-    <div class="card" id="inputs"></div>
+    <div id="game" style="display:none;">
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                <button class="secondary" onclick="goHome()">⚙️</button>
+                <button class="secondary" onclick="undo()">↩ Undo</button>
+                <button style="background: #ef4444; box-shadow: 0 4px 0 #991b1b;" onclick="resetGame()">🔄 Reset</button>
+            </div>
 
-    <div class="total" id="roundTotal">Round Total: 0</div>
-    <div class="lastRound" id="lastRound">Last Round: -</div>
+            <div id="inputs"></div>
 
-    <button onclick="saveRound()">Save Round</button>
-    <button onclick="clearInputs()">Clear</button>
+            <div class="total" id="roundTotal">Round Total: 0</div>
+            <div class="lastRound" id="lastRound">Last Round: -</div>
 
-    <div class="leaderboard" id="leaderboard"></div>
+            <div style="margin-top: 15px;">
+                <button style="width: 60%;" onclick="saveRound()">Save Round</button>
+                <button class="secondary" onclick="clearInputs()">Clear</button>
+            </div>
+        </div>
+
+        <div class="leaderboard" id="leaderboard"></div>
+    </div>
 </div>
 
 <script>
+// ALL LOGIC PRESERVED FROM ORIGINAL
 let players=[], scores=[], lastRoundData=null;
 
 function addPlayer(name=""){
     let input=document.createElement("input");
     input.value=name;
     input.placeholder="Name";
+    input.style.width = "80%";
     document.getElementById("players").appendChild(input);
 }
 
@@ -139,10 +216,12 @@ function renderInputs(){
     players.forEach((p,i)=>{
         html+=`
         <div class="row">
-            ${p}
-            <button onclick="step(${i},-1)">-</button>
-            <input id="p${i}" type="number" value="0" oninput="updateTotal()">
-            <button onclick="step(${i},1)">+</button>
+            <span class="player-name">${p}</span>
+            <div style="display: flex; align-items: center;">
+                <button style="padding: 8px 15px;" onclick="step(${i},-1)">-</button>
+                <input id="p${i}" type="number" value="0" oninput="updateTotal()">
+                <button style="padding: 8px 15px;" onclick="step(${i},1)">+</button>
+            </div>
         </div>`;
     });
     inputs.innerHTML=html;
@@ -216,14 +295,14 @@ function update(){
     let arr=players.map((p,i)=>({p, s:scores[i]}));
     arr.sort((a,b)=> mode==="high"?b.s-a.s:a.s-b.s);
 
-    let html="<h2>🏆 Leaderboard</h2>";
+    let html="<h2 style='margin-top:0'>🏆 Leaderboard</h2>";
     arr.forEach((x,i)=>{
         let win=i===0;
         if(target){
             if(mode==="high" && x.s>=target) win=true;
             if(mode==="low" && x.s<=target) win=true;
         }
-        html+=`<div class="${win?'winner':''}">
+        html+=`<div class="${win?'winner':''}" style="margin: 8px 0; font-size: 1.1rem;">
         ${i+1}. ${x.p}: ${x.s}</div>`;
     });
 
